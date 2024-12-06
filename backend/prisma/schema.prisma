@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model WeatherData {
+  id        Int            @id @default(autoincrement())
+  highTemp  Float
+  lowTemp   Float
+  weather   String
+  windSpeed Float
+  date      DateTime
+  query     WeatherQueries @relation(fields: [queryId], references: [id])
+  queryId   Int
+}
+
+model WeatherQueries {
+  id           Int           @id @default(autoincrement())
+  query        String
+  weatherData  WeatherData[]
+  users        User[]
+}
+
+model User {
+  id        Int             @id @default(autoincrement())
+  uniqueId  String          @unique
+  queries   WeatherQueries[]
+}
