@@ -20,13 +20,13 @@ const Chat = ({
 
   const [newMessageText, setNewMessageText] = useState("");
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex">
       <form
         onSubmit={async (e) => {
           e.preventDefault();
           const parsedMessage = parseYearMonth(newMessageText);
 
-          await handleSearch(parsedMessage?.dateQuery as string);
+          handleSearch(parsedMessage?.dateQuery as string);
           await sendMessage({
             view: parsedMessage?.view as string,
             dateQuery: parsedMessage?.dateQuery as string,
@@ -41,11 +41,40 @@ const Chat = ({
             const text = e.target.value;
             setNewMessageText(text);
           }}
-          placeholder="Write a message…"
+          placeholder="/table or /compare (optional) year month"
           autoFocus
+          className="p-2 border rounded-lg mr-2"
+          style={{
+            minWidth: 350,
+          }}
         />
         <button type="submit" disabled={!newMessageText}>
-          Send
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="12" cy="12" r="12" fill="#D3D3D3" />
+            <line
+              x1="12"
+              y1="6"
+              x2="12"
+              y2="18"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <line
+              x1="6"
+              y1="12"
+              x2="18"
+              y2="12"
+              stroke="white"
+              strokeWidth="2"
+            />
+          </svg>
         </button>
       </form>
     </div>
