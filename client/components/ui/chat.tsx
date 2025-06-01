@@ -10,9 +10,11 @@ import { parseYearMonth } from "../utils";
 const Chat = ({
   data,
   handleSearch,
+  setMode,
 }: {
   data: any;
   handleSearch: (query: string) => void;
+  setMode: (mode: string) => void;
 }) => {
   const sendMessage = useMutation(api.chat.sendMessage);
 
@@ -24,14 +26,19 @@ const Chat = ({
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          console.log({
+            newMessageText,
+          });
           const parsedMessage = parseYearMonth(newMessageText);
 
-          handleSearch(parsedMessage?.dateQuery as string);
-          await sendMessage({
-            view: parsedMessage?.view as string,
-            dateQuery: parsedMessage?.dateQuery as string,
-            results: JSON.stringify(data),
-          });
+          if (parsedMessage?.dateQuery) {
+            handleSearch(parsedMessage?.dateQuery as string);
+            await sendMessage({
+              view: parsedMessage?.view as string,
+              dateQuery: parsedMessage?.dateQuery as string,
+              results: JSON.stringify(data),
+            });
+          }
           setNewMessageText("");
         }}
       >
@@ -41,7 +48,7 @@ const Chat = ({
             const text = e.target.value;
             setNewMessageText(text);
           }}
-          placeholder="/table or /compare (optional) year month"
+          placeholder="#table or #graph (optional) year month"
           autoFocus
           className="p-2 border rounded-lg mr-2"
           style={{

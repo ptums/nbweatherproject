@@ -140,9 +140,7 @@ export function NBWeatherProjectApp() {
       {
         onSuccess: (data) => {
           if (mode.includes("graph")) handleComparisionList(query, data);
-          console.log({
-            data,
-          });
+          return data;
         },
       }
     );
@@ -167,6 +165,7 @@ export function NBWeatherProjectApp() {
       <div className="flex flex-row justify-between">
         <Chat
           data={fetchWeatherMutation.data}
+          setMode={setMode}
           handleSearch={(searchQuery) => {
             if (uniqueId) {
               handleSearch(searchQuery, uniqueId);
