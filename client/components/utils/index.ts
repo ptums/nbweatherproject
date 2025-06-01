@@ -100,9 +100,26 @@ export function buildComparionList(
   };
 }
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL = "http://localhost:8080";
 export const buildApiUrl = (path: string) => `${API_BASE_URL}${path}`;
 
 export const sortByDate = (data: WeatherData[]) => {
   return data.sort((a, b) => (new Date(a.date) > new Date(b.date) ? 1 : -1));
+};
+
+// Helper to parse messages of form "#table YYYY MM" or "YYYY MM"
+export const parseYearMonth = (
+  message: string
+): { dateQuery: string; view: string } | null => {
+  const hasTablePrefix = /^#table\s*/i.test(message);
+  const view = hasTablePrefix ? "table" : "";
+
+  const cleaned = message.replace(/^#table\s*/i, "").trim();
+  // Match exactly two groups of 4 and 1-2 digit numbers (year and month)
+  const match = cleaned.match(/^(\d{4})\s+(\d{1,2})$/);
+  if (!match) return null;
+  const [, year, month] = match;
+
+  const dateQuery = `${month}-${year}`;
+  return { dateQuery, view };
 };

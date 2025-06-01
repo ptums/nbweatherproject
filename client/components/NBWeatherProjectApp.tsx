@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState, useEffect } from "react";
+import React, { useId, useState, useEffect } from "react";
 import {
   SITE_DEFAULTS,
   WEAHTER_DATA_ENDPOINT,
@@ -11,8 +11,9 @@ import {
   WeatherData,
   WeatherQueries,
 } from "./utils/types";
-import { CompareView, DateForm, WeatherTable } from "./ui";
 import { buildApiUrl, buildComparionList, sortByDate } from "./utils";
+import Chat from "./ui/chat";
+import { CompareView, WeatherTable } from "./ui/displays";
 
 export function NBWeatherProjectApp() {
   const generatedUniqueId = useId();
@@ -139,6 +140,9 @@ export function NBWeatherProjectApp() {
       {
         onSuccess: (data) => {
           if (mode.includes("graph")) handleComparisionList(query, data);
+          console.log({
+            data,
+          });
         },
       }
     );
@@ -161,7 +165,8 @@ export function NBWeatherProjectApp() {
     <div className="p-4 h-screen overflow-hidden">
       <h1 className="text-xl font-semibold mb-2">{SITE_DEFAULTS.title}</h1>
       <div className="flex flex-row justify-between">
-        <DateForm
+        <Chat
+          data={fetchWeatherMutation.data}
           handleSearch={(searchQuery) => {
             if (uniqueId) {
               handleSearch(searchQuery, uniqueId);
